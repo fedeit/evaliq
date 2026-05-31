@@ -63,7 +63,8 @@ const Sidebar = ({ route, setRoute }) => (
       active={route === 'brief'}
       onClick={() => setRoute('brief')} />
     <NavItem icon={Icons.ChartLine} label="Reports"
-      onClick={() => {}} />
+      active={route === 'reports'}
+      onClick={() => setRoute('reports')} />
     <div style={{ flex: 1 }} />
     <NavItem icon={Icons.Link2} label="Integrations" primary
       active={route === 'integrations'}
@@ -105,6 +106,7 @@ const Header = ({ route, agent, onBack }) => {
   } else if (route === '1on1s') title = '1:1s';
   else if (route === 'brief') title = 'Briefs';
   else if (route === 'logger') title = 'Post-meeting note';
+  else if (route === 'reports') title = 'Reports';
   else if (route === 'integrations') title = 'Integrations';
   else if (route === 'settings') title = 'User Settings';
 

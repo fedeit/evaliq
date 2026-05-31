@@ -21,6 +21,7 @@
 <script type="text/babel" src="PrepBrief.jsx"></script>
 <script type="text/babel" src="PostMeetingLogger.jsx"></script>
 <script type="text/babel" src="OneOnOnes.jsx"></script>
+<script type="text/babel" src="Reports.jsx"></script>
 <script type="text/babel" src="AdminIntegrations.jsx"></script>
 <script type="text/babel" src="UserSettings.jsx"></script>
 
@@ -41,6 +42,7 @@ function App() {
   else if (route === 'brief') screen = <PrepBrief a={agent} onBack={() => setRoute('profile')} openLogger={openLogger} />;
   else if (route === 'logger') screen = <PostMeetingLogger a={agent} onBack={() => setRoute('brief')} onSave={() => setRoute('team')} />;
   else if (route === '1on1s') screen = <OneOnOnes openAgent={openAgent} openBrief={(a) => { setAgent(a); openBrief(); }} openLogger={(a) => { setAgent(a); openLogger(); }} />;
+  else if (route === 'reports') screen = <Reports />;
   else if (route === 'integrations') screen = <AdminIntegrations />;
   else if (route === 'settings') screen = <UserSettings />;
 
