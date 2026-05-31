@@ -9,3 +9,4 @@
 - Added `UI_ROADMAP_ALIGNMENT.md` to track roadmap-driven UI hooks and feedback/rubric gap fixes.
 - Applied feedback/rubric UI fixes: safer AI/HR wording, manager-facing brief language, generic integration copy, development-context goals, and the 180 hrs/year value metric.
 - Made the prep brief editable: `Edit` toggles manager editing mode, draft sections become editable, approval changes the state to manager approved, and citations remain visible outside edit mode.
+- Extended edit mode to coaching questions and suggested next steps, kept source citations visible while editing, added manager prep notes, and removed the nonfunctional regenerate action.

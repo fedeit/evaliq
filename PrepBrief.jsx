@@ -155,12 +155,20 @@ const SourcesPanel = () => {
   );
 };
 
-const EditableDraft = ({ editing, value, onChange, rows = 3, children }) => editing ? (
-  <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows}
-    style={{ width: '100%', fontSize: 14, padding: '10px 12px', borderRadius: 8,
-             border: '1px solid var(--indigo-200)', background: 'var(--indigo-50)',
-             fontFamily: 'var(--font-sans)', lineHeight: 1.55, resize: 'vertical',
-             outline: 'none', color: 'var(--fg-primary)', marginBottom: 10 }} />
+const EditableDraft = ({ editing, value, onChange, rows = 3, sources = [], children }) => editing ? (
+  <div style={{ marginBottom: 10 }}>
+    <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows}
+      style={{ width: '100%', fontSize: 14, padding: '10px 12px', borderRadius: 8,
+               border: '1px solid var(--indigo-200)', background: 'var(--indigo-50)',
+               fontFamily: 'var(--font-sans)', lineHeight: 1.55, resize: 'vertical',
+               outline: 'none', color: 'var(--fg-primary)' }} />
+    {sources.length > 0 && (
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginTop: 6 }}>
+        <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>Sources</span>
+        {sources.map(n => <Cite key={n} n={n} />)}
+      </div>
+    )}
+  </div>
 ) : children;
 
 const PrepBrief = ({ a, onBack, openLogger }) => {
@@ -181,6 +189,14 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
     concern2Note: `Ask ${firstName} to describe her documentation process for imaging tickets.`,
     concern3: 'Call quality score 86/100, down 3 pts; hold time p95 up slightly.',
     concern3Note: 'Minor signal — flag only if it continues next cycle.',
+    question1: 'Walk me through the network-team handoff on INC-44219. Where did the time go?',
+    question2: 'What would have to be true for first-response p95 to land under 12 minutes next month?',
+    question3: `You mentioned Tier 3 as a 12-month goal — what's the first step you'd want this quarter?`,
+    question4: 'How are you feeling about workload right now, honestly?',
+    nextStep1: 'Loop in network-team lead on the three breach tickets to fix the handoff path.',
+    nextStep2: `Pair ${firstName} with Priya for two escalation shadows over the next two weeks.`,
+    nextStep3: 'Revisit Tier 3 path in the Q2 development plan; add a concrete milestone.',
+    managerNote: '',
   });
   const setField = (key, value) => setDraft(d => ({ ...d, [key]: value }));
   const statusLabel = approved ? 'Manager approved' : editingBrief ? 'Manager editing' : 'AI draft · source-backed';
@@ -200,7 +216,6 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <button className="btn btn-secondary" onClick={() => { setEditingBrief(e => !e); setApproved(false); }}>
           {editingBrief ? 'Done editing' : 'Edit'}
         </button>
-        <button className="btn btn-secondary"><Icons.Sparkles />Regenerate</button>
         <button className="btn btn-primary" onClick={() => { setApproved(true); setEditingBrief(false); }}>
           <Icons.Check />Approve brief
         </button>
@@ -221,10 +236,10 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       </EditableDraft>
 
       <BriefSection eyebrow="Trajectory">
-        <EditableDraft editing={editingBrief} value={draft.trajectory1} onChange={v => setField('trajectory1', v)}>
+        <EditableDraft editing={editingBrief} value={draft.trajectory1} onChange={v => setField('trajectory1', v)} sources={[1]}>
           <p>{draft.trajectory1} <Cite n={1} /></p>
         </EditableDraft>
-        <EditableDraft editing={editingBrief} value={draft.trajectory2} onChange={v => setField('trajectory2', v)}>
+        <EditableDraft editing={editingBrief} value={draft.trajectory2} onChange={v => setField('trajectory2', v)} sources={[2, 8]}>
           <p>{draft.trajectory2} <Cite n={2} /> <Cite n={8} /></p>
         </EditableDraft>
       </BriefSection>
@@ -233,7 +248,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <div className="bullet-row">
           <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
           <div className="bullet-text">
-            <EditableDraft editing={editingBrief} value={draft.highlight1} onChange={v => setField('highlight1', v)} rows={2}>
+            <EditableDraft editing={editingBrief} value={draft.highlight1} onChange={v => setField('highlight1', v)} rows={2} sources={[3]}>
               <>{draft.highlight1} <Cite n={3} />.</>
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.highlight1Note} onChange={v => setField('highlight1Note', v)} rows={2}>
@@ -244,7 +259,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <div className="bullet-row">
           <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
           <div className="bullet-text">
-            <EditableDraft editing={editingBrief} value={draft.highlight2} onChange={v => setField('highlight2', v)} rows={2}>
+            <EditableDraft editing={editingBrief} value={draft.highlight2} onChange={v => setField('highlight2', v)} rows={2} sources={[4]}>
               <>{draft.highlight2} <Cite n={4} />.</>
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.highlight2Note} onChange={v => setField('highlight2Note', v)} rows={2}>
@@ -258,7 +273,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <div className="bullet-row">
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
-            <EditableDraft editing={editingBrief} value={draft.concern1} onChange={v => setField('concern1', v)} rows={2}>
+            <EditableDraft editing={editingBrief} value={draft.concern1} onChange={v => setField('concern1', v)} rows={2} sources={[5, 1]}>
               <>{draft.concern1} <Cite n={5} /> <Cite n={1} />.</>
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern1Note} onChange={v => setField('concern1Note', v)} rows={2}>
@@ -269,7 +284,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <div className="bullet-row">
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
-            <EditableDraft editing={editingBrief} value={draft.concern2} onChange={v => setField('concern2', v)} rows={2}>
+            <EditableDraft editing={editingBrief} value={draft.concern2} onChange={v => setField('concern2', v)} rows={2} sources={[6]}>
               <>{draft.concern2} <Cite n={6} />.</>
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern2Note} onChange={v => setField('concern2Note', v)} rows={2}>
@@ -280,7 +295,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
         <div className="bullet-row">
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
-            <EditableDraft editing={editingBrief} value={draft.concern3} onChange={v => setField('concern3', v)} rows={2}>
+            <EditableDraft editing={editingBrief} value={draft.concern3} onChange={v => setField('concern3', v)} rows={2} sources={[7]}>
               <>{draft.concern3} <Cite n={7} />.</>
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern3Note} onChange={v => setField('concern3Note', v)} rows={2}>
@@ -291,20 +306,52 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       </BriefSection>
 
       <BriefSection eyebrow="Coaching questions">
-        <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
-          <li>Walk me through the network-team handoff on INC-44219. Where did the time go? <Cite n={1} /></li>
-          <li>What would have to be true for first-response p95 to land under 12 minutes next month? <Cite n={5} /></li>
-          <li>You mentioned Tier 3 as a 12-month goal &mdash; what&apos;s the first step you&apos;d want this quarter?</li>
-          <li>How are you feeling about workload right now, honestly?</li>
-        </ol>
+        {editingBrief ? (
+          <div>
+            {['question1', 'question2', 'question3', 'question4'].map((key, i) => (
+              <EditableDraft key={key} editing value={draft[key]} onChange={v => setField(key, v)} rows={2}
+                sources={key === 'question1' ? [1] : key === 'question2' ? [5] : []}>
+                <span />
+              </EditableDraft>
+            ))}
+          </div>
+        ) : (
+          <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
+            <li>{draft.question1} <Cite n={1} /></li>
+            <li>{draft.question2} <Cite n={5} /></li>
+            <li>{draft.question3}</li>
+            <li>{draft.question4}</li>
+          </ol>
+        )}
       </BriefSection>
 
       <BriefSection eyebrow="Suggested next steps">
-        <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
-          <li>Loop in network-team lead on the three breach tickets to fix the handoff path. <Cite n={1} /></li>
-          <li>Pair {a.name.split(' ')[0]} with Priya for two escalation shadows over the next two weeks.</li>
-          <li>Revisit Tier 3 path in the Q2 development plan; add a concrete milestone.</li>
-        </ol>
+        {editingBrief ? (
+          <div>
+            {['nextStep1', 'nextStep2', 'nextStep3'].map(key => (
+              <EditableDraft key={key} editing value={draft[key]} onChange={v => setField(key, v)} rows={2}
+                sources={key === 'nextStep1' ? [1] : []}>
+                <span />
+              </EditableDraft>
+            ))}
+          </div>
+        ) : (
+          <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
+            <li>{draft.nextStep1} <Cite n={1} /></li>
+            <li>{draft.nextStep2}</li>
+            <li>{draft.nextStep3}</li>
+          </ol>
+        )}
+      </BriefSection>
+
+      <BriefSection eyebrow="Manager notes">
+        <textarea value={draft.managerNote} onChange={e => setField('managerNote', e.target.value)}
+          placeholder="Add private prep notes before the 1:1. These carry into the post-meeting logger."
+          rows={3}
+          style={{ width: '100%', fontSize: 13, padding: '10px 12px', borderRadius: 8,
+                   border: '1px solid var(--border-default)', background: 'white',
+                   fontFamily: 'var(--font-sans)', lineHeight: 1.5, resize: 'vertical',
+                   outline: 'none', color: 'var(--fg-primary)' }} />
       </BriefSection>
 
       <SourcesPanel />
