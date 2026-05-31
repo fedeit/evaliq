@@ -11,3 +11,4 @@
 - Made the prep brief editable: `Edit` toggles manager editing mode, draft sections become editable, approval changes the state to manager approved, and citations remain visible outside edit mode.
 - Extended edit mode to coaching questions and suggested next steps, kept source citations visible while editing, added manager prep notes, and removed the nonfunctional regenerate action.
 - Clarified section-level notes so they are separate from the global brief edit mode.
+- Enlarged editable brief text areas for easier manager review.

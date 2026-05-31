@@ -156,9 +156,10 @@ const SourcesPanel = () => {
 };
 
 const EditableDraft = ({ editing, value, onChange, rows = 3, sources = [], children }) => editing ? (
-  <div style={{ marginBottom: 10 }}>
+  <div style={{ marginBottom: 14 }}>
     <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows}
-      style={{ width: '100%', fontSize: 14, padding: '10px 12px', borderRadius: 8,
+      style={{ width: '100%', minHeight: Math.max(rows * 42, 96), fontSize: 14,
+               padding: '12px 14px', borderRadius: 8,
                border: '1px solid var(--indigo-200)', background: 'var(--indigo-50)',
                fontFamily: 'var(--font-sans)', lineHeight: 1.55, resize: 'vertical',
                outline: 'none', color: 'var(--fg-primary)' }} />
