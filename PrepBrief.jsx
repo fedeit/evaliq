@@ -83,13 +83,13 @@ const BriefSection = ({ eyebrow, children }) => {
           <button className="btn btn-ghost"
             style={{ marginLeft: 'auto', fontSize: 11, padding: '2px 8px', color: 'var(--fg-muted)' }}
             onClick={() => setEditing(true)}>
-            <Icons.Plus size={11} /> Add note
+            <Icons.Plus size={11} /> Add section note
           </button>
         )}
         {note && !editing && (
           <button className="btn btn-ghost"
             style={{ marginLeft: 'auto', fontSize: 11, padding: '2px 8px', color: 'var(--amber-700)' }}
-            onClick={() => setEditing(true)}>Edit note</button>
+            onClick={() => setEditing(true)}>Edit section note</button>
         )}
       </div>
       {children}
@@ -97,7 +97,7 @@ const BriefSection = ({ eyebrow, children }) => {
         <div style={{ marginTop: 10, padding: '10px 14px', background: 'var(--amber-50)',
                       border: '1px solid var(--amber-100)', borderRadius: 8 }}>
           <textarea autoFocus value={note} onChange={e => setNote(e.target.value)}
-            placeholder="Your note for this section — carries into the next brief."
+            placeholder="Manager note for this section — preserves the draft and carries into the next brief."
             rows={2}
             style={{ width: '100%', fontSize: 13, background: 'transparent', border: 'none',
                      outline: 'none', resize: 'vertical', fontFamily: 'var(--font-sans)',
@@ -110,7 +110,7 @@ const BriefSection = ({ eyebrow, children }) => {
       )}
       {note && !editing && (
         <div className="brief-note">
-          <div className="brief-note-label">Your note</div>
+          <div className="brief-note-label">Section note</div>
           {note}
         </div>
       )}
