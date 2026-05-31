@@ -6,3 +6,5 @@
 - Fixed the sidebar `Reports` item so it opens a real route instead of doing nothing.
 - Added `Reports.jsx`, a working team review report screen with source-backed summary, metrics, and agent evidence rows.
 - Registered `Reports.jsx` in `index.html` and mapped the `reports` route to the new screen.
+- Added `UI_ROADMAP_ALIGNMENT.md` to track roadmap-driven UI hooks and feedback/rubric gap fixes.
+- Applied feedback/rubric UI fixes: safer AI/HR wording, manager-facing brief language, generic integration copy, development-context goals, and the 180 hrs/year value metric.

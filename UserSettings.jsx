@@ -94,7 +94,7 @@ const UserSettings = () => {
       {/* Prep brief notifications */}
       <SettingsSection
         title="Prep brief emails"
-        description="EvalIQ generates an AI prep brief before each scheduled 1:1. Choose when to receive it and who else should be copied.">
+        description="EvalIQ generates a source-backed prep draft before each scheduled 1:1. The manager reviews it before use.">
 
         <SettingRow label="Enable prep brief emails"
           hint="Receive a brief email before each 1:1 pulled from your Google Calendar.">
@@ -134,8 +134,8 @@ const UserSettings = () => {
 
       {/* Additional recipients */}
       <SettingsSection
-        title="Additional recipients"
-        description="These people receive the same prep brief you do, before every 1:1. Useful for HR business partners or skip-level managers who need visibility.">
+        title="Approved stakeholders"
+        description="Approved stakeholders can receive summary notifications after manager review. Raw prep briefs remain manager-facing by default.">
 
         {recipients.length > 0 && (
           <div style={{ marginBottom: 12 }}>

@@ -154,7 +154,7 @@ const TeamDashboard = ({ openAgent }) => {
       <div className="page-head">
         <div>
           <h1 className="page-title">Team performance</h1>
-          <p className="page-sub">ServiceNow + Amazon Connect + CSAT · synced 2 min ago</p>
+          <p className="page-sub">Ticketing + calls + CSAT · synced 2 min ago</p>
         </div>
         <div className="row">
           <DateRangePicker value={dateRange} onChange={setDateRange} />

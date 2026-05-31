@@ -199,9 +199,9 @@ const EmployeeProfile = ({ a, onBack, openBrief }) => {
             tags={['recognition', 'documentation']} />
         </PanelCard>
 
-        {/* Goals — full-width below the 2×2 grid */}
+        {/* Development context — full-width below the evidence grid */}
         <div style={{ gridColumn: '1 / -1' }}>
-          <PanelCard icon={Icons.TrendUp} title="Goals"
+          <PanelCard icon={Icons.TrendUp} title="Development context"
             action={
               <button className="btn btn-ghost" style={{ fontSize: 12 }}
                 onClick={() => setAddingGoal(true)}>

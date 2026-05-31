@@ -160,8 +160,8 @@ const PrepBrief = ({ a, onBack, openLogger }) => (
     <div className="page-head">
       <div>
         <div className="row" style={{ marginBottom: 6 }}>
-          <Pill kind="ai"><Icons.Sparkles size={11} /> AI-generated · 24h before 1:1</Pill>
-          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources</span>
+          <Pill kind="ai"><Icons.Sparkles size={11} /> AI draft · source-backed</Pill>
+          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources &middot; manager review required</span>
         </div>
         <h1 className="page-title">Prep brief &mdash; {a.name}</h1>
         <p className="page-sub">Tomorrow at 10:00 &middot; 30 min &middot; review window 5 min</p>
@@ -169,7 +169,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => (
       <div className="row">
         <button className="btn btn-secondary">Edit</button>
         <button className="btn btn-secondary"><Icons.Sparkles />Regenerate</button>
-        <button className="btn btn-primary" onClick={openLogger}><Icons.Check />Mark reviewed</button>
+        <button className="btn btn-primary" onClick={openLogger}><Icons.Check />Approve brief</button>
       </div>
     </div>
 

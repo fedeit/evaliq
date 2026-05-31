@@ -200,7 +200,7 @@ const PostMeetingLogger = ({ a, onBack, onSave }) => {
           <label>Additional notes</label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
             placeholder="Anything else from the conversation not captured above." />
-          <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>Seeds the next prep brief and the HR write-up at review time.</span>
+          <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>Seeds the next prep brief and manager-owned review notes.</span>
         </div>
 
         <div className="field">
@@ -218,7 +218,7 @@ const PostMeetingLogger = ({ a, onBack, onSave }) => {
         <div className="row" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--border-default)' }}>
           <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Saved · 2 sec ago</span>
           <div style={{ marginLeft: 'auto' }} className="row">
-            <button className="btn btn-secondary" type="button">Add to HR file</button>
+            <button className="btn btn-secondary" type="button">Save review evidence</button>
             <button className="btn btn-primary" type="button" onClick={() => setSaved(true)}><Icons.Check />Done</button>
           </div>
         </div>
