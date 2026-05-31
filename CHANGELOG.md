@@ -15,3 +15,4 @@
 - Expanded editable bullet rows to use the full brief width.
 - Removed highlight/concern icons during edit mode so fields use the full section width.
 - Rebuilt highlight and concern edit mode to bypass the bullet layout entirely, matching the full-width Trajectory edit fields.
+- Replaced the global prep brief edit control with section-level edit buttons near each editable brief section.
