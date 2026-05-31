@@ -43,8 +43,8 @@ const Brand = () => (
   </div>
 );
 
-const NavItem = ({ icon: Ico, label, count, active, onClick }) => (
-  <div className={`nav-item ${active ? 'active' : ''}`} onClick={onClick}>
+const NavItem = ({ icon: Ico, label, count, active, onClick, primary }) => (
+  <div className={`nav-item ${active ? 'active' : ''} ${primary ? 'nav-main' : ''}`} onClick={onClick}>
     <Ico /> <span>{label}</span>
     {count != null && <span className="nav-item-count">{count}</span>}
   </div>
@@ -53,24 +53,29 @@ const NavItem = ({ icon: Ico, label, count, active, onClick }) => (
 const Sidebar = ({ route, setRoute }) => (
   <aside className="nav">
     <Brand />
-    <NavItem icon={Icons.Users} label="Team" count="6"
+    <NavItem icon={Icons.Users} label="Team" count="6" primary
       active={route === 'team' || route === 'profile'}
       onClick={() => setRoute('team')} />
-    <NavItem icon={Icons.Calendar} label="1:1s" count="3"
+    <NavItem icon={Icons.Calendar} label="1:1s" count="3" primary
       active={route === '1on1s'}
       onClick={() => setRoute('1on1s')} />
-    <NavItem icon={Icons.Sparkles} label="Briefs" count="2"
+    <NavItem icon={Icons.Sparkles} label="Briefs" count="2" primary
       active={route === 'brief'}
       onClick={() => setRoute('brief')} />
     <NavItem icon={Icons.ChartLine} label="Reports"
       onClick={() => {}} />
     <div style={{ flex: 1 }} />
-    <NavItem icon={Icons.Settings} label="Settings" />
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 8px', borderTop: '1px solid var(--border-subtle)', marginTop: 8 }}>
+    <NavItem icon={Icons.Link2} label="Integrations" primary
+      active={route === 'integrations'}
+      onClick={() => setRoute('integrations')} />
+    <NavItem icon={Icons.Settings} label="User Settings"
+      active={route === 'settings'}
+      onClick={() => setRoute('settings')} />
+    <div className="nav-user">
       <Avatar name="Sam Hidalgo" size={32} />
       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <span style={{ fontSize: 13, fontWeight: 500 }}>Sam Hidalgo</span>
-        <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>IT Helpdesk · UMass</span>
+        <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>IT Helpdesk · Stanford</span>
       </div>
     </div>
   </aside>
@@ -100,6 +105,8 @@ const Header = ({ route, agent, onBack }) => {
   } else if (route === '1on1s') title = '1:1s';
   else if (route === 'brief') title = 'Briefs';
   else if (route === 'logger') title = 'Post-meeting note';
+  else if (route === 'integrations') title = 'Integrations';
+  else if (route === 'settings') title = 'User Settings';
 
   return (
     <header className="header">

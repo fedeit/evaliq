@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>EvalIQ — UI Kit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EvalIQ</title>
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="app.css">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -19,13 +20,16 @@
 <script type="text/babel" src="EmployeeProfile.jsx"></script>
 <script type="text/babel" src="PrepBrief.jsx"></script>
 <script type="text/babel" src="PostMeetingLogger.jsx"></script>
+<script type="text/babel" src="OneOnOnes.jsx"></script>
+<script type="text/babel" src="AdminIntegrations.jsx"></script>
+<script type="text/babel" src="UserSettings.jsx"></script>
 
 <script type="text/babel">
 const { useState } = React;
 
 function App() {
   const [route, setRoute] = useState('team');
-  const [agent, setAgent] = useState(TEAM[0]); // Maya by default
+  const [agent, setAgent] = useState(TEAM[0]);
 
   const openAgent = (a) => { setAgent(a); setRoute('profile'); };
   const openBrief = () => setRoute('brief');
@@ -36,7 +40,9 @@ function App() {
   else if (route === 'profile') screen = <EmployeeProfile a={agent} onBack={() => setRoute('team')} openBrief={openBrief} />;
   else if (route === 'brief') screen = <PrepBrief a={agent} onBack={() => setRoute('profile')} openLogger={openLogger} />;
   else if (route === 'logger') screen = <PostMeetingLogger a={agent} onBack={() => setRoute('brief')} onSave={() => setRoute('team')} />;
-  else if (route === '1on1s') screen = <TeamDashboard openAgent={openAgent} />;
+  else if (route === '1on1s') screen = <OneOnOnes openAgent={openAgent} openBrief={(a) => { setAgent(a); openBrief(); }} openLogger={(a) => { setAgent(a); openLogger(); }} />;
+  else if (route === 'integrations') screen = <AdminIntegrations />;
+  else if (route === 'settings') screen = <UserSettings />;
 
   return (
     <div className="app">
