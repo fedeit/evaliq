@@ -14,3 +14,4 @@
 - Enlarged editable brief text areas for easier manager review.
 - Expanded editable bullet rows to use the full brief width.
 - Removed highlight/concern icons during edit mode so fields use the full section width.
+- Rebuilt highlight and concern edit mode to bypass the bullet layout entirely, matching the full-width Trajectory edit fields.

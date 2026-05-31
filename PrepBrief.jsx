@@ -246,64 +246,88 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       </BriefSection>
 
       <BriefSection eyebrow="Highlights">
-        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
-          {!editingBrief && <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>}
-          <div className="bullet-text">
+        {editingBrief ? (
+          <>
             <EditableDraft editing={editingBrief} value={draft.highlight1} onChange={v => setField('highlight1', v)} rows={2} sources={[3]}>
-              <>{draft.highlight1} <Cite n={3} />.</>
+              <span />
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.highlight1Note} onChange={v => setField('highlight1Note', v)} rows={2}>
-              <small>{draft.highlight1Note}</small>
+              <span />
             </EditableDraft>
-          </div>
-        </div>
-        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
-          {!editingBrief && <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>}
-          <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.highlight2} onChange={v => setField('highlight2', v)} rows={2} sources={[4]}>
-              <>{draft.highlight2} <Cite n={4} />.</>
+              <span />
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.highlight2Note} onChange={v => setField('highlight2Note', v)} rows={2}>
-              <small>{draft.highlight2Note}</small>
+              <span />
             </EditableDraft>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>
+            <div className="bullet-row">
+              <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
+              <div className="bullet-text">
+                {draft.highlight1} <Cite n={3} />.
+                <small>{draft.highlight1Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
+              <div className="bullet-text">
+                {draft.highlight2} <Cite n={4} />.
+                <small>{draft.highlight2Note}</small>
+              </div>
+            </div>
+          </>
+        )}
       </BriefSection>
 
       <BriefSection eyebrow="Concerns">
-        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
-          {!editingBrief && <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>}
-          <div className="bullet-text">
+        {editingBrief ? (
+          <>
             <EditableDraft editing={editingBrief} value={draft.concern1} onChange={v => setField('concern1', v)} rows={2} sources={[5, 1]}>
-              <>{draft.concern1} <Cite n={5} /> <Cite n={1} />.</>
+              <span />
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern1Note} onChange={v => setField('concern1Note', v)} rows={2}>
-              <small>{draft.concern1Note}</small>
+              <span />
             </EditableDraft>
-          </div>
-        </div>
-        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
-          {!editingBrief && <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>}
-          <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.concern2} onChange={v => setField('concern2', v)} rows={2} sources={[6]}>
-              <>{draft.concern2} <Cite n={6} />.</>
+              <span />
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern2Note} onChange={v => setField('concern2Note', v)} rows={2}>
-              <small>{draft.concern2Note}</small>
+              <span />
             </EditableDraft>
-          </div>
-        </div>
-        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
-          {!editingBrief && <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>}
-          <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.concern3} onChange={v => setField('concern3', v)} rows={2} sources={[7]}>
-              <>{draft.concern3} <Cite n={7} />.</>
+              <span />
             </EditableDraft>
             <EditableDraft editing={editingBrief} value={draft.concern3Note} onChange={v => setField('concern3Note', v)} rows={2}>
-              <small>{draft.concern3Note}</small>
+              <span />
             </EditableDraft>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern1} <Cite n={5} /> <Cite n={1} />.
+                <small>{draft.concern1Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern2} <Cite n={6} />.
+                <small>{draft.concern2Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern3} <Cite n={7} />.
+                <small>{draft.concern3Note}</small>
+              </div>
+            </div>
+          </>
+        )}
       </BriefSection>
 
       <BriefSection eyebrow="Coaching questions">
