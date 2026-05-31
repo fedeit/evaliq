@@ -205,7 +205,7 @@
   display: flex; gap: 12px; padding: 10px 0;
   border-bottom: 1px solid var(--border-subtle);
 }
-.bullet-row.editing { align-items: flex-start; }
+.bullet-row.editing { display: block; padding-left: 0; }
 .bullet-row:last-child { border-bottom: none; }
 .bullet-mark {
   width: 22px; height: 22px; border-radius: 999px; flex-shrink: 0;

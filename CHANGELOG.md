@@ -13,3 +13,4 @@
 - Clarified section-level notes so they are separate from the global brief edit mode.
 - Enlarged editable brief text areas for easier manager review.
 - Expanded editable bullet rows to use the full brief width.
+- Removed highlight/concern icons during edit mode so fields use the full section width.
