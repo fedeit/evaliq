@@ -246,7 +246,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       </BriefSection>
 
       <BriefSection eyebrow="Highlights">
-        <div className="bullet-row">
+        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
           <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
           <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.highlight1} onChange={v => setField('highlight1', v)} rows={2} sources={[3]}>
@@ -257,7 +257,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
             </EditableDraft>
           </div>
         </div>
-        <div className="bullet-row">
+        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
           <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
           <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.highlight2} onChange={v => setField('highlight2', v)} rows={2} sources={[4]}>
@@ -271,7 +271,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       </BriefSection>
 
       <BriefSection eyebrow="Concerns">
-        <div className="bullet-row">
+        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.concern1} onChange={v => setField('concern1', v)} rows={2} sources={[5, 1]}>
@@ -282,7 +282,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
             </EditableDraft>
           </div>
         </div>
-        <div className="bullet-row">
+        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.concern2} onChange={v => setField('concern2', v)} rows={2} sources={[6]}>
@@ -293,7 +293,7 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
             </EditableDraft>
           </div>
         </div>
-        <div className="bullet-row">
+        <div className={`bullet-row ${editingBrief ? 'editing' : ''}`}>
           <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
           <div className="bullet-text">
             <EditableDraft editing={editingBrief} value={draft.concern3} onChange={v => setField('concern3', v)} rows={2} sources={[7]}>

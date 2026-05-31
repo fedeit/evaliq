@@ -12,3 +12,4 @@
 - Extended edit mode to coaching questions and suggested next steps, kept source citations visible while editing, added manager prep notes, and removed the nonfunctional regenerate action.
 - Clarified section-level notes so they are separate from the global brief edit mode.
 - Enlarged editable brief text areas for easier manager review.
+- Expanded editable bullet rows to use the full brief width.
