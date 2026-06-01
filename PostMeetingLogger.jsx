@@ -1,5 +1,4 @@
-// Post-Meeting Logger — lightweight rating + action-item form,
-// pre-populated from the brief's coaching questions.
+// Post-Meeting Logger — lightweight rating and manager-owned action-item form.
 
 const Stars = ({ value, onChange }) => (
   <div className="stars">
@@ -66,13 +65,17 @@ const EmailPreview = ({ a, rating, outcome, notes, actionItems }) => (
       </div>
       <div>
         <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--fg-muted)', fontWeight: 600, marginBottom: 8 }}>Action items</div>
-        {actionItems.map((it, i) => (
-          <div key={i} style={{ display: 'flex', gap: 10, padding: '7px 0', borderBottom: '1px solid var(--border-subtle)', fontSize: 13 }}>
-            <span style={{ color: 'var(--teal-700)', flexShrink: 0 }}>☐</span>
-            <span style={{ flex: 1, color: 'var(--slate-800)' }}>{it.text}</span>
-            <span style={{ color: 'var(--fg-muted)', fontFamily: 'var(--font-mono)', fontSize: 11 }}>{it.owner} · {it.due}</span>
-          </div>
-        ))}
+        {actionItems.length === 0 ? (
+          <p style={{ fontSize: 13, color: 'var(--fg-muted)', lineHeight: 1.6, margin: 0 }}>No action items were added.</p>
+        ) : (
+          actionItems.map((it, i) => (
+            <div key={i} style={{ display: 'flex', gap: 10, padding: '7px 0', borderBottom: '1px solid var(--border-subtle)', fontSize: 13 }}>
+              <span style={{ color: 'var(--teal-700)', flexShrink: 0 }}>☐</span>
+              <span style={{ flex: 1, color: 'var(--slate-800)' }}>{it.text}</span>
+              <span style={{ color: 'var(--fg-muted)', fontFamily: 'var(--font-mono)', fontSize: 11 }}>{it.owner}{it.due ? ` · ${it.due}` : ''}</span>
+            </div>
+          ))
+        )}
       </div>
       <p style={{ fontSize: 11, color: 'var(--fg-muted)', marginTop: 20, marginBottom: 0, lineHeight: 1.5 }}>
         This note will appear in {a.name.split(' ')[0]}'s profile and be referenced in the next auto-generated prep brief. To edit it, open the profile in EvalIQ.
@@ -98,12 +101,18 @@ const PostMeetingLogger = ({ a, onBack, onSave }) => {
     3: "Said 'honestly fine' — seemed genuine. Volume is up but she's managing. No burnout signals.",
   });
   const [notes, setNotes] = React.useState('');
-  const [actionItems, setActionItems] = React.useState([
-    { text: "Schedule shadow sessions with Priya", owner: 'Maya', due: '2026-05-13' },
-    { text: "Loop in network-team lead on INC-44219 / 44402 / 44587", owner: 'Sam', due: '2026-05-06' },
-    { text: "Add change-mgmt cert to Q2 development plan", owner: 'Maya', due: '2026-05-20' },
-  ]);
+  const [actionItems, setActionItems] = React.useState([]);
   const [saved, setSaved] = React.useState(false);
+  const updateActionItem = (index, field, value) => {
+    setActionItems(items => items.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  };
+  const addActionItem = () => {
+    setActionItems(items => [...items, { text: '', owner: a.name.split(' ')[0], due: '' }]);
+  };
+  const removeActionItem = (index) => {
+    setActionItems(items => items.filter((_, i) => i !== index));
+  };
+  const savedActionItems = actionItems.filter(item => item.text.trim());
 
   if (saved) return (
     <main className="main" style={{ maxWidth: 760 }}>
@@ -125,7 +134,7 @@ const PostMeetingLogger = ({ a, onBack, onSave }) => {
       <div style={{ fontSize: 12, color: 'var(--fg-muted)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
         <Icons.Mail size={12} /> Email sent to sam.hidalgo@stanford.edu
       </div>
-      <EmailPreview a={a} rating={rating} outcome={outcome} notes={notes} actionItems={actionItems} />
+      <EmailPreview a={a} rating={rating} outcome={outcome} notes={notes} actionItems={savedActionItems} />
     </main>
   );
 
@@ -205,14 +214,36 @@ const PostMeetingLogger = ({ a, onBack, onSave }) => {
 
         <div className="field">
           <label>Action items</label>
+          <span style={{ fontSize: 11, color: 'var(--fg-muted)', marginBottom: 8, display: 'block' }}>
+            Add only the follow-ups you agreed to in the conversation.
+          </span>
+          {actionItems.length === 0 && (
+            <div style={{ padding: '12px 14px', border: '1px dashed var(--border-default)',
+                          borderRadius: 8, color: 'var(--fg-muted)', fontSize: 13 }}>
+              No action items yet.
+            </div>
+          )}
           {actionItems.map((it, i) => (
-            <div key={i} className="row" style={{ padding: '10px 0', borderBottom: '1px solid var(--border-subtle)' }}>
-              <Icons.CheckCircle />
-              <span style={{ flex: 1, fontSize: 13 }}>{it.text}</span>
-              <span style={{ fontSize: 11, color: 'var(--fg-muted)', fontFamily: 'var(--font-mono)' }}>{it.owner} · {it.due}</span>
+            <div key={i} className="action-item-editor">
+              <input value={it.text} onChange={e => updateActionItem(i, 'text', e.target.value)}
+                placeholder="Follow-up action"
+                style={{ fontSize: 13, padding: '8px 10px', borderRadius: 6,
+                         border: '1px solid var(--border-default)', outline: 'none' }} />
+              <input value={it.owner} onChange={e => updateActionItem(i, 'owner', e.target.value)}
+                placeholder="Owner"
+                style={{ fontSize: 13, padding: '8px 10px', borderRadius: 6,
+                         border: '1px solid var(--border-default)', outline: 'none' }} />
+              <input value={it.due} onChange={e => updateActionItem(i, 'due', e.target.value)}
+                placeholder="Due date"
+                style={{ fontSize: 13, padding: '8px 10px', borderRadius: 6,
+                         border: '1px solid var(--border-default)', outline: 'none' }} />
+              <button className="btn btn-ghost" type="button" onClick={() => removeActionItem(i)}
+                style={{ padding: '6px 8px' }}>Remove</button>
             </div>
           ))}
-          <button className="btn btn-ghost" style={{ marginTop: 8 }} type="button"><Icons.Plus />Add action item</button>
+          <button className="btn btn-ghost" style={{ marginTop: 8 }} type="button" onClick={addActionItem}>
+            <Icons.Plus />Add action item
+          </button>
         </div>
 
         <div className="row" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--border-default)' }}>

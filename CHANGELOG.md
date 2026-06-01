@@ -16,3 +16,4 @@
 - Removed highlight/concern icons during edit mode so fields use the full section width.
 - Rebuilt highlight and concern edit mode to bypass the bullet layout entirely, matching the full-width Trajectory edit fields.
 - Replaced the global prep brief edit control with section-level edit buttons near each editable brief section.
+- Applied final UI feedback: report value now says `180 hrs recovered last year`, tier filters explain Tier 1/2/3 without count badges, approved briefs show status instead of the approve button, and post-meeting action items are manager-created instead of prefilled.

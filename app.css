@@ -253,6 +253,14 @@
   box-shadow: 0 0 0 3px var(--border-focus-halo);
 }
 .field textarea { resize: vertical; min-height: 80px; font-family: var(--font-sans); line-height: 1.5; }
+.action-item-editor {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 100px 130px auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
 
 /* ======= Tabs ======= */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-default); margin-bottom: 20px; }
@@ -504,6 +512,8 @@
 
   /* Goals section: full-width already, just reduce padding */
   .card-pad-lg { padding: 16px; }
+  .action-item-editor { grid-template-columns: 1fr; }
+  .action-item-editor .btn { justify-self: flex-start; }
 
   /* Date picker: open to left edge on mobile */
   .date-picker-dropdown { right: auto; left: 0; }

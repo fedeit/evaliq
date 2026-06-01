@@ -125,6 +125,11 @@ const TeamSummary = ({ members }) => {
 };
 
 const TIER_LABELS = { 1: 'Tier 1 · Frontline', 2: 'Tier 2 · Specialist', 3: 'Tier 3 · Escalation' };
+const TIER_DESCRIPTIONS = {
+  1: 'Tier 1 handles common intake and first-response support.',
+  2: 'Tier 2 owns specialist troubleshooting and repeat issues.',
+  3: 'Tier 3 handles escalations, complex incidents, and mentoring.',
+};
 
 const TeamDashboard = ({ openAgent }) => {
   const [dateRange, setDateRange] = React.useState('last30');
@@ -164,19 +169,17 @@ const TeamDashboard = ({ openAgent }) => {
 
       <TeamSummary members={visibleTeam} />
 
-      <div className="tabs" style={{ marginBottom: 16 }}>
-        {[['all', 'All', null], ['1', 'Tier 1', 3], ['2', 'Tier 2', 2], ['3', 'Tier 3', 1]].map(([id, label, n]) => (
+      <div className="tabs" style={{ marginBottom: 10 }}>
+        {[['all', 'All'], ['1', 'Tier 1'], ['2', 'Tier 2'], ['3', 'Tier 3']].map(([id, label]) => (
           <div key={id} className={`tab ${tierFilter === id ? 'active' : ''}`}
             onClick={() => setTierFilter(id)}>
             {label}
-            {n != null && (
-              <span style={{ marginLeft: 6, fontFamily: 'var(--font-mono)', fontSize: 11,
-                             color: tierFilter === id ? 'var(--indigo-600)' : 'var(--fg-muted)' }}>
-                {n}
-              </span>
-            )}
           </div>
         ))}
+      </div>
+      <div style={{ marginBottom: 16, fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.5 }}>
+        Tier 1 handles intake and common issues. Tier 2 handles specialist troubleshooting.
+        Tier 3 handles escalations, complex incidents, and mentoring.
       </div>
 
       <div className="card" style={{ overflow: 'hidden', padding: 0 }}>
@@ -205,6 +208,9 @@ const TeamDashboard = ({ openAgent }) => {
                         </span>
                         <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>
                           {row.count} agent{row.count > 1 ? 's' : ''}
+                        </span>
+                        <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>
+                          {TIER_DESCRIPTIONS[row.tier]}
                         </span>
                         <span style={{ fontSize: 12, color: 'var(--fg-secondary)',
                                        fontFamily: 'var(--font-mono)' }}>

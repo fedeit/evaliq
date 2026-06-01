@@ -44,7 +44,7 @@ const Reports = () => (
       <ReportMetric label="CSAT" value="4.6" note="stable across 142 responses" tone="good" />
       <ReportMetric label="SLA flags" value="3" note="network handoff pattern" tone="warn" />
       <ReportMetric label="Brief coverage" value="92%" note="11 of 12 meetings sourced" />
-      <ReportMetric label="Prep time" value="180 hrs" note="recovered per manager/year" tone="good" />
+      <ReportMetric label="Prep time" value="180 hrs" note="recovered last year" tone="good" />
     </div>
 
     <div className="card card-pad-lg" style={{ marginBottom: 24 }}>

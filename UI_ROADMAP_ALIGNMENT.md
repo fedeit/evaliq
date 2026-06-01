@@ -183,7 +183,7 @@ Feedback source: problem-space comments and final MVP rubric pass.
 
 #### Status
 
-- Done: `Reports.jsx` now includes `Prep time: 180 hrs recovered per manager/year`.
+- Done: `Reports.jsx` now includes `Prep time: 180 hrs recovered last year`.
 
 #### Remaining Watchouts
 
@@ -199,7 +199,7 @@ Feedback source: problem rubric and roadmap rubric.
 
 - Done: `PrepBrief.jsx` retains source count and citation coverage.
 - Done: `Reports.jsx` includes brief coverage.
-- Partial: manager approval is visible through `Approve brief` and `manager review required`.
+- Done: manager approval is visible after approval; the approve button is replaced by an approved status and the coverage line changes to `manager approved`.
 - Pending for roadmap pass: review-readiness evidence fields are not yet added.
 
 #### Remaining Watchouts
@@ -231,7 +231,7 @@ Feedback source: solution comments and final pushback list.
    - Carryforward/previous-meeting context
    - Continuity metrics
 4. Partial: add low-friction value/evidence metrics.
-   - Done: `180 hrs/year recovered`
+   - Done: `180 hrs recovered last year`
    - Done: brief coverage/source count retained
    - Pending: review evidence/source completeness panel
 

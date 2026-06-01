@@ -223,15 +223,19 @@ const PrepBrief = ({ a, onBack, openLogger }) => {
       <div>
         <div className="row" style={{ marginBottom: 6 }}>
           <Pill kind={approved ? 'healthy' : anyEditing ? 'warn' : 'ai'}><Icons.Sparkles size={11} /> {statusLabel}</Pill>
-          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources &middot; manager review required</span>
+          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources &middot; {approved ? 'manager approved' : 'manager review required'}</span>
         </div>
         <h1 className="page-title">Prep brief &mdash; {a.name}</h1>
         <p className="page-sub">Tomorrow at 10:00 &middot; 30 min &middot; review window 5 min</p>
       </div>
       <div className="row">
-        <button className="btn btn-primary" onClick={() => { setApproved(true); setEditingSections({}); }}>
-          <Icons.Check />Approve brief
-        </button>
+        {approved ? (
+          <Pill kind="healthy" dot={false}><Icons.Check size={12} /> Approved</Pill>
+        ) : (
+          <button className="btn btn-primary" onClick={() => { setApproved(true); setEditingSections({}); }}>
+            <Icons.Check />Approve brief
+          </button>
+        )}
         {approved && <button className="btn btn-secondary" onClick={openLogger}>Open logger</button>}
       </div>
     </div>
