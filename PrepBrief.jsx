@@ -72,32 +72,41 @@ const Cite = ({ n }) => {
   );
 };
 
-const BriefSection = ({ eyebrow, children }) => {
+const BriefSection = ({ eyebrow, editKey, editingDraft = false, onToggleDraft, children }) => {
   const [note, setNote] = React.useState('');
   const [editing, setEditing] = React.useState(false);
   return (
     <section className="brief-section">
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
         <h3 style={{ margin: 0 }}>{eyebrow}</h3>
-        {!note && !editing && (
-          <button className="btn btn-ghost"
-            style={{ marginLeft: 'auto', fontSize: 11, padding: '2px 8px', color: 'var(--fg-muted)' }}
-            onClick={() => setEditing(true)}>
-            <Icons.Plus size={11} /> Add note
-          </button>
-        )}
-        {note && !editing && (
-          <button className="btn btn-ghost"
-            style={{ marginLeft: 'auto', fontSize: 11, padding: '2px 8px', color: 'var(--amber-700)' }}
-            onClick={() => setEditing(true)}>Edit note</button>
-        )}
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
+          {editKey && (
+            <button className="btn btn-secondary"
+              style={{ fontSize: 11, padding: '2px 8px' }}
+              onClick={onToggleDraft}>
+              {editingDraft ? 'Done editing' : 'Edit section'}
+            </button>
+          )}
+          {!note && !editing && (
+            <button className="btn btn-ghost"
+              style={{ fontSize: 11, padding: '2px 8px', color: 'var(--fg-muted)' }}
+              onClick={() => setEditing(true)}>
+              <Icons.Plus size={11} /> Add section note
+            </button>
+          )}
+          {note && !editing && (
+            <button className="btn btn-ghost"
+              style={{ fontSize: 11, padding: '2px 8px', color: 'var(--amber-700)' }}
+              onClick={() => setEditing(true)}>Edit section note</button>
+          )}
+        </div>
       </div>
       {children}
       {editing && (
         <div style={{ marginTop: 10, padding: '10px 14px', background: 'var(--amber-50)',
                       border: '1px solid var(--amber-100)', borderRadius: 8 }}>
           <textarea autoFocus value={note} onChange={e => setNote(e.target.value)}
-            placeholder="Your note for this section — carries into the next brief."
+            placeholder="Manager note for this section — preserves the draft and carries into the next brief."
             rows={2}
             style={{ width: '100%', fontSize: 13, background: 'transparent', border: 'none',
                      outline: 'none', resize: 'vertical', fontFamily: 'var(--font-sans)',
@@ -110,7 +119,7 @@ const BriefSection = ({ eyebrow, children }) => {
       )}
       {note && !editing && (
         <div className="brief-note">
-          <div className="brief-note-label">Your note</div>
+          <div className="brief-note-label">Section note</div>
           {note}
         </div>
       )}
@@ -155,94 +164,248 @@ const SourcesPanel = () => {
   );
 };
 
-const PrepBrief = ({ a, onBack, openLogger }) => (
+const EditableDraft = ({ editing, value, onChange, rows = 3, sources = [], children }) => editing ? (
+  <div style={{ marginBottom: 14 }}>
+    <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows}
+      style={{ width: '100%', minHeight: Math.max(rows * 42, 96), fontSize: 14,
+               padding: '12px 14px', borderRadius: 8,
+               border: '1px solid var(--indigo-200)', background: 'var(--indigo-50)',
+               fontFamily: 'var(--font-sans)', lineHeight: 1.55, resize: 'vertical',
+               outline: 'none', color: 'var(--fg-primary)' }} />
+    {sources.length > 0 && (
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginTop: 6 }}>
+        <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>Sources</span>
+        {sources.map(n => <Cite key={n} n={n} />)}
+      </div>
+    )}
+  </div>
+) : children;
+
+const PrepBrief = ({ a, onBack, openLogger }) => {
+  const [editingSections, setEditingSections] = React.useState({});
+  const [approved, setApproved] = React.useState(false);
+  const firstName = a.name.split(' ')[0];
+  const [draft, setDraft] = React.useState({
+    summary: `${firstName} is steady on volume but slipping on first-response time.`,
+    trajectory1: `Resolution rate held at ${Math.round(a.resolved * 100)}% over the last 30 days, in line with the team average. First-response time slipped on three high-priority tickets, all involving a single escalation path through the network team.`,
+    trajectory2: `CSAT trended down from 4.6 to ${a.csat.toFixed(1)} across 28 responses. Two negative comments referenced wait time, not technical accuracy — suggesting the bottleneck is upstream.`,
+    highlight1: 'Handled the Datacenter B power-event escalation single-handedly — kept SLA on 11 of 14 affected tickets.',
+    highlight1Note: 'Worth specific recognition. Mentor opportunity for Tomás and Derek.',
+    highlight2: 'Two CSAT verbatims praised follow-through on MFA and login issues that other agents escalate.',
+    highlight2Note: 'Theme: persistence on problems others bounce. Reinforce this explicitly.',
+    concern1: 'First-response p95 climbed to 14m 22s, up from 11m last cycle. All three SLA breaches trace to the network-team handoff path.',
+    concern1Note: 'Likely a process issue, not effort. Probe the handoff specifically.',
+    concern2: 'Reopened tickets up from 4 to 6 this window. Both involve laptop imaging where root cause was not documented.',
+    concern2Note: `Ask ${firstName} to describe her documentation process for imaging tickets.`,
+    concern3: 'Call quality score 86/100, down 3 pts; hold time p95 up slightly.',
+    concern3Note: 'Minor signal — flag only if it continues next cycle.',
+    question1: 'Walk me through the network-team handoff on INC-44219. Where did the time go?',
+    question2: 'What would have to be true for first-response p95 to land under 12 minutes next month?',
+    question3: `You mentioned Tier 3 as a 12-month goal — what's the first step you'd want this quarter?`,
+    question4: 'How are you feeling about workload right now, honestly?',
+    nextStep1: 'Loop in network-team lead on the three breach tickets to fix the handoff path.',
+    nextStep2: `Pair ${firstName} with Priya for two escalation shadows over the next two weeks.`,
+    nextStep3: 'Revisit Tier 3 path in the Q2 development plan; add a concrete milestone.',
+    managerNote: '',
+  });
+  const setField = (key, value) => setDraft(d => ({ ...d, [key]: value }));
+  const isEditing = (key) => !!editingSections[key];
+  const toggleSection = (key) => {
+    setEditingSections(s => ({ ...s, [key]: !s[key] }));
+    setApproved(false);
+  };
+  const anyEditing = Object.values(editingSections).some(Boolean);
+  const statusLabel = approved ? 'Manager approved' : anyEditing ? 'Manager editing' : 'AI draft · source-backed';
+
+  return (
   <main className="main">
     <div className="page-head">
       <div>
         <div className="row" style={{ marginBottom: 6 }}>
-          <Pill kind="ai"><Icons.Sparkles size={11} /> AI-generated · 24h before 1:1</Pill>
-          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources</span>
+          <Pill kind={approved ? 'healthy' : anyEditing ? 'warn' : 'ai'}><Icons.Sparkles size={11} /> {statusLabel}</Pill>
+          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Coverage: 92% &middot; {SOURCES.length} sources &middot; {approved ? 'manager approved' : 'manager review required'}</span>
         </div>
         <h1 className="page-title">Prep brief &mdash; {a.name}</h1>
         <p className="page-sub">Tomorrow at 10:00 &middot; 30 min &middot; review window 5 min</p>
       </div>
       <div className="row">
-        <button className="btn btn-secondary">Edit</button>
-        <button className="btn btn-secondary"><Icons.Sparkles />Regenerate</button>
-        <button className="btn btn-primary" onClick={openLogger}><Icons.Check />Mark reviewed</button>
+        {approved ? (
+          <Pill kind="healthy" dot={false}><Icons.Check size={12} /> Approved</Pill>
+        ) : (
+          <button className="btn btn-primary" onClick={() => { setApproved(true); setEditingSections({}); }}>
+            <Icons.Check />Approve brief
+          </button>
+        )}
+        {approved && <button className="btn btn-secondary" onClick={openLogger}>Open logger</button>}
       </div>
     </div>
 
     <div className="brief">
-      <span className="brief-eyebrow"><Icons.Sparkles size={11} /> Performance summary</span>
-      <h2 className="brief-title">{a.name.split(' ')[0]} is steady on volume but slipping on first-response time.</h2>
+      <div style={{ marginBottom: 18, padding: '12px 14px', border: '1px solid var(--indigo-100)',
+                    borderRadius: 10, background: 'var(--indigo-50)', color: 'var(--indigo-900)',
+                    fontSize: 13, lineHeight: 1.55 }}>
+        Draft generated by EvalIQ. Manager reviews before use. Every claim links to a source.
+      </div>
 
-      <BriefSection eyebrow="Trajectory">
-        <p>Resolution rate held at <strong>{Math.round(a.resolved * 100)}%</strong> over the last 30 days, in line with the team average. First-response time slipped on three high-priority tickets <Cite n={1} />, all involving a single escalation path through the network team.</p>
-        <p>CSAT trended down from 4.6 to {a.csat.toFixed(1)} across 28 responses <Cite n={2} />. Two negative comments referenced wait time, not technical accuracy <Cite n={8} /> &mdash; suggesting the bottleneck is upstream.</p>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+        <span className="brief-eyebrow" style={{ marginBottom: 0 }}><Icons.Sparkles size={11} /> Performance summary</span>
+        <button className="btn btn-secondary"
+          style={{ marginLeft: 'auto', fontSize: 11, padding: '2px 8px' }}
+          onClick={() => toggleSection('summary')}>
+          {isEditing('summary') ? 'Done editing' : 'Edit summary'}
+        </button>
+      </div>
+      <EditableDraft editing={isEditing('summary')} value={draft.summary} onChange={v => setField('summary', v)} rows={2}>
+        <h2 className="brief-title">{draft.summary}</h2>
+      </EditableDraft>
+
+      <BriefSection eyebrow="Trajectory" editKey="trajectory" editingDraft={isEditing('trajectory')} onToggleDraft={() => toggleSection('trajectory')}>
+        <EditableDraft editing={isEditing('trajectory')} value={draft.trajectory1} onChange={v => setField('trajectory1', v)} sources={[1]}>
+          <p>{draft.trajectory1} <Cite n={1} /></p>
+        </EditableDraft>
+        <EditableDraft editing={isEditing('trajectory')} value={draft.trajectory2} onChange={v => setField('trajectory2', v)} sources={[2, 8]}>
+          <p>{draft.trajectory2} <Cite n={2} /> <Cite n={8} /></p>
+        </EditableDraft>
       </BriefSection>
 
-      <BriefSection eyebrow="Highlights">
-        <div className="bullet-row">
-          <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
-          <div className="bullet-text">
-            Handled the Datacenter B power-event escalation single-handedly &mdash; kept SLA on 11 of 14 affected tickets <Cite n={3} />.
-            <small>Worth specific recognition. Mentor opportunity for Tom&aacute;s and Derek.</small>
-          </div>
-        </div>
-        <div className="bullet-row">
-          <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
-          <div className="bullet-text">
-            Two CSAT verbatims praised follow-through on MFA and login issues that other agents escalate <Cite n={4} />.
-            <small>Theme: persistence on problems others bounce. Reinforce this explicitly.</small>
-          </div>
-        </div>
+      <BriefSection eyebrow="Highlights" editKey="highlights" editingDraft={isEditing('highlights')} onToggleDraft={() => toggleSection('highlights')}>
+        {isEditing('highlights') ? (
+          <>
+            <EditableDraft editing={isEditing('highlights')} value={draft.highlight1} onChange={v => setField('highlight1', v)} rows={2} sources={[3]}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('highlights')} value={draft.highlight1Note} onChange={v => setField('highlight1Note', v)} rows={2}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('highlights')} value={draft.highlight2} onChange={v => setField('highlight2', v)} rows={2} sources={[4]}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('highlights')} value={draft.highlight2Note} onChange={v => setField('highlight2Note', v)} rows={2}>
+              <span />
+            </EditableDraft>
+          </>
+        ) : (
+          <>
+            <div className="bullet-row">
+              <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
+              <div className="bullet-text">
+                {draft.highlight1} <Cite n={3} />.
+                <small>{draft.highlight1Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark up"><Icons.TrendUp size={12} /></span>
+              <div className="bullet-text">
+                {draft.highlight2} <Cite n={4} />.
+                <small>{draft.highlight2Note}</small>
+              </div>
+            </div>
+          </>
+        )}
       </BriefSection>
 
-      <BriefSection eyebrow="Concerns">
-        <div className="bullet-row">
-          <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
-          <div className="bullet-text">
-            First-response p95 climbed to 14m 22s, up from 11m last cycle <Cite n={5} />. All three SLA breaches trace to the network-team handoff path <Cite n={1} />.
-            <small>Likely a process issue, not effort. Probe the handoff specifically.</small>
-          </div>
-        </div>
-        <div className="bullet-row">
-          <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
-          <div className="bullet-text">
-            Reopened tickets up from 4 to 6 this window <Cite n={6} />. Both involve laptop imaging where root cause was not documented.
-            <small>Ask {a.name.split(' ')[0]} to describe her documentation process for imaging tickets.</small>
-          </div>
-        </div>
-        <div className="bullet-row">
-          <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
-          <div className="bullet-text">
-            Call quality score 86/100, down 3 pts; hold time p95 up slightly <Cite n={7} />.
-            <small>Minor signal &mdash; flag only if it continues next cycle.</small>
-          </div>
-        </div>
+      <BriefSection eyebrow="Concerns" editKey="concerns" editingDraft={isEditing('concerns')} onToggleDraft={() => toggleSection('concerns')}>
+        {isEditing('concerns') ? (
+          <>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern1} onChange={v => setField('concern1', v)} rows={2} sources={[5, 1]}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern1Note} onChange={v => setField('concern1Note', v)} rows={2}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern2} onChange={v => setField('concern2', v)} rows={2} sources={[6]}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern2Note} onChange={v => setField('concern2Note', v)} rows={2}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern3} onChange={v => setField('concern3', v)} rows={2} sources={[7]}>
+              <span />
+            </EditableDraft>
+            <EditableDraft editing={isEditing('concerns')} value={draft.concern3Note} onChange={v => setField('concern3Note', v)} rows={2}>
+              <span />
+            </EditableDraft>
+          </>
+        ) : (
+          <>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern1} <Cite n={5} /> <Cite n={1} />.
+                <small>{draft.concern1Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern2} <Cite n={6} />.
+                <small>{draft.concern2Note}</small>
+              </div>
+            </div>
+            <div className="bullet-row">
+              <span className="bullet-mark down"><Icons.TrendDown size={12} /></span>
+              <div className="bullet-text">
+                {draft.concern3} <Cite n={7} />.
+                <small>{draft.concern3Note}</small>
+              </div>
+            </div>
+          </>
+        )}
       </BriefSection>
 
-      <BriefSection eyebrow="Coaching questions">
-        <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
-          <li>Walk me through the network-team handoff on INC-44219. Where did the time go? <Cite n={1} /></li>
-          <li>What would have to be true for first-response p95 to land under 12 minutes next month? <Cite n={5} /></li>
-          <li>You mentioned Tier 3 as a 12-month goal &mdash; what&apos;s the first step you&apos;d want this quarter?</li>
-          <li>How are you feeling about workload right now, honestly?</li>
-        </ol>
+      <BriefSection eyebrow="Coaching questions" editKey="questions" editingDraft={isEditing('questions')} onToggleDraft={() => toggleSection('questions')}>
+        {isEditing('questions') ? (
+          <div>
+            {['question1', 'question2', 'question3', 'question4'].map((key, i) => (
+              <EditableDraft key={key} editing value={draft[key]} onChange={v => setField(key, v)} rows={2}
+                sources={key === 'question1' ? [1] : key === 'question2' ? [5] : []}>
+                <span />
+              </EditableDraft>
+            ))}
+          </div>
+        ) : (
+          <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
+            <li>{draft.question1} <Cite n={1} /></li>
+            <li>{draft.question2} <Cite n={5} /></li>
+            <li>{draft.question3}</li>
+            <li>{draft.question4}</li>
+          </ol>
+        )}
       </BriefSection>
 
-      <BriefSection eyebrow="Suggested next steps">
-        <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
-          <li>Loop in network-team lead on the three breach tickets to fix the handoff path. <Cite n={1} /></li>
-          <li>Pair {a.name.split(' ')[0]} with Priya for two escalation shadows over the next two weeks.</li>
-          <li>Revisit Tier 3 path in the Q2 development plan; add a concrete milestone.</li>
-        </ol>
+      <BriefSection eyebrow="Suggested next steps" editKey="nextSteps" editingDraft={isEditing('nextSteps')} onToggleDraft={() => toggleSection('nextSteps')}>
+        {isEditing('nextSteps') ? (
+          <div>
+            {['nextStep1', 'nextStep2', 'nextStep3'].map(key => (
+              <EditableDraft key={key} editing value={draft[key]} onChange={v => setField(key, v)} rows={2}
+                sources={key === 'nextStep1' ? [1] : []}>
+                <span />
+              </EditableDraft>
+            ))}
+          </div>
+        ) : (
+          <ol style={{ paddingLeft: 18, margin: 0, fontSize: 14, lineHeight: 1.8, color: 'var(--slate-800)' }}>
+            <li>{draft.nextStep1} <Cite n={1} /></li>
+            <li>{draft.nextStep2}</li>
+            <li>{draft.nextStep3}</li>
+          </ol>
+        )}
+      </BriefSection>
+
+      <BriefSection eyebrow="Manager notes">
+        <textarea value={draft.managerNote} onChange={e => setField('managerNote', e.target.value)}
+          placeholder="Add private prep notes before the 1:1. These carry into the post-meeting logger."
+          rows={3}
+          style={{ width: '100%', fontSize: 13, padding: '10px 12px', borderRadius: 8,
+                   border: '1px solid var(--border-default)', background: 'white',
+                   fontFamily: 'var(--font-sans)', lineHeight: 1.5, resize: 'vertical',
+                   outline: 'none', color: 'var(--fg-primary)' }} />
       </BriefSection>
 
       <SourcesPanel />
     </div>
   </main>
-);
+  );
+};
 
 window.PrepBrief = PrepBrief;

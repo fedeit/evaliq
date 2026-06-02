@@ -205,6 +205,7 @@
   display: flex; gap: 12px; padding: 10px 0;
   border-bottom: 1px solid var(--border-subtle);
 }
+.bullet-row.editing { display: block; padding-left: 0; }
 .bullet-row:last-child { border-bottom: none; }
 .bullet-mark {
   width: 22px; height: 22px; border-radius: 999px; flex-shrink: 0;
@@ -213,7 +214,7 @@
 }
 .bullet-mark.up { background: var(--teal-50); color: var(--teal-700); }
 .bullet-mark.down { background: var(--rose-50); color: var(--rose-700); }
-.bullet-text { font-size: 14px; line-height: 1.55; color: var(--slate-800); }
+.bullet-text { flex: 1; min-width: 0; font-size: 14px; line-height: 1.55; color: var(--slate-800); }
 .bullet-text small { display: block; color: var(--fg-muted); font-size: 12px; margin-top: 4px; }
 
 /* ======= Inspector ======= */
@@ -252,6 +253,14 @@
   box-shadow: 0 0 0 3px var(--border-focus-halo);
 }
 .field textarea { resize: vertical; min-height: 80px; font-family: var(--font-sans); line-height: 1.5; }
+.action-item-editor {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 100px 130px auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
 
 /* ======= Tabs ======= */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-default); margin-bottom: 20px; }
@@ -503,6 +512,8 @@
 
   /* Goals section: full-width already, just reduce padding */
   .card-pad-lg { padding: 16px; }
+  .action-item-editor { grid-template-columns: 1fr; }
+  .action-item-editor .btn { justify-self: flex-start; }
 
   /* Date picker: open to left edge on mobile */
   .date-picker-dropdown { right: auto; left: 0; }

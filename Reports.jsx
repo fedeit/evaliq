@@ -39,18 +39,20 @@ const Reports = () => (
       </div>
     </div>
 
-    <div className="stat-grid" style={{ marginBottom: 24, gridTemplateColumns: 'repeat(4, 1fr)' }}>
+    <div className="stat-grid" style={{ marginBottom: 24, gridTemplateColumns: 'repeat(5, 1fr)' }}>
       <ReportMetric label="Resolution" value="84%" note="+4 pts vs prior window" tone="good" />
       <ReportMetric label="CSAT" value="4.6" note="stable across 142 responses" tone="good" />
       <ReportMetric label="SLA flags" value="3" note="network handoff pattern" tone="warn" />
       <ReportMetric label="Brief coverage" value="92%" note="11 of 12 meetings sourced" />
+      <ReportMetric label="Prep time" value="180 hrs" note="recovered last year" tone="good" />
     </div>
 
     <div className="card card-pad-lg" style={{ marginBottom: 24 }}>
       <div className="row" style={{ marginBottom: 14 }}>
         <span style={{ color: 'var(--indigo-600)' }}><Icons.Sparkles size={18} /></span>
-        <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>AI summary</h3>
+        <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>Draft evidence summary</h3>
         <Pill kind="ai">source-backed</Pill>
+        <Pill kind="neutral">manager review required</Pill>
       </div>
       <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: 'var(--slate-800)' }}>
         Team performance is stable overall, with strong resolution and CSAT. The primary coaching theme is not

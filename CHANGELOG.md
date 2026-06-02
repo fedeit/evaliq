@@ -6,3 +6,14 @@
 - Fixed the sidebar `Reports` item so it opens a real route instead of doing nothing.
 - Added `Reports.jsx`, a working team review report screen with source-backed summary, metrics, and agent evidence rows.
 - Registered `Reports.jsx` in `index.html` and mapped the `reports` route to the new screen.
+- Added `UI_ROADMAP_ALIGNMENT.md` to track roadmap-driven UI hooks and feedback/rubric gap fixes.
+- Applied feedback/rubric UI fixes: safer AI/HR wording, manager-facing brief language, generic integration copy, development-context goals, and the 180 hrs/year value metric.
+- Made the prep brief editable: `Edit` toggles manager editing mode, draft sections become editable, approval changes the state to manager approved, and citations remain visible outside edit mode.
+- Extended edit mode to coaching questions and suggested next steps, kept source citations visible while editing, added manager prep notes, and removed the nonfunctional regenerate action.
+- Clarified section-level notes so they are separate from the global brief edit mode.
+- Enlarged editable brief text areas for easier manager review.
+- Expanded editable bullet rows to use the full brief width.
+- Removed highlight/concern icons during edit mode so fields use the full section width.
+- Rebuilt highlight and concern edit mode to bypass the bullet layout entirely, matching the full-width Trajectory edit fields.
+- Replaced the global prep brief edit control with section-level edit buttons near each editable brief section.
+- Applied final UI feedback: report value now says `180 hrs recovered last year`, tier filters explain Tier 1/2/3 without count badges, approved briefs show status instead of the approve button, and post-meeting action items are manager-created instead of prefilled.
